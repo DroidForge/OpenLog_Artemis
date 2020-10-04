@@ -677,6 +677,27 @@ void beginIMU()
     }
     
     online.IMU = true;
+
+    //set IMU to use full scale range
+    ICM_20948_fss_t myFSS;  // This uses a "Full Scale Settings" structure that can contain values for all configurable sensors
+  
+    myFSS.a = gpm16;         // (ICM_20948_ACCEL_CONFIG_FS_SEL_e)
+                            // gpm2
+                            // gpm4
+                            // gpm8
+                            // gpm16
+                            
+    myFSS.g = dps2000;       // (ICM_20948_GYRO_CONFIG_1_FS_SEL_e)
+                            // dps250
+                            // dps500
+                            // dps1000
+                            // dps2000
+                            
+    myICM.setFullScale( (ICM_20948_Internal_Acc | ICM_20948_Internal_Gyr), myFSS );  
+    if( myICM.status != ICM_20948_Stat_Ok){
+      Serial.print(F("setFullScale returned: "));
+      Serial.println(myICM.statusString());
+    }
   }
   else
   {
